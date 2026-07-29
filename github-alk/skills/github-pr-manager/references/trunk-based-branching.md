@@ -77,10 +77,59 @@ to branch, rebase, and clean up — for raw `gh` / `git` syntax see
   ```
 
 - If local deletion fails because the branch is "not fully merged" locally,
-  stop and explain rather than forcing it (`-D`) — that error means the
-  local view of the branch is missing commits that made it to the trunk by
-  another path (e.g. squash-merge), and force-deleting could lose work that
-  was never actually observed as merged from this machine.
+  do not force it (`-D`) purely on that error — it can mean the branch
+  genuinely has unmerged local work. Instead confirm closure through an
+  independent signal first (PR state via `gh`, or the remote-tracking ref
+  showing `: gone]` after a pruned fetch — see **Reconcile the local repo
+  when a PR closes** below) and only then force-delete.
+
+## Reconcile the local repo when a PR closes
+
+Whenever a PR this skill is tracking closes — merged through this skill's
+own `references/release-closure.md` flow, merged or squash-merged by someone
+else, or closed without merging — reconcile the local repo before doing
+anything else, even if the session didn't perform the merge itself:
+
+```bash
+git checkout master
+git fetch origin --prune
+git pull --ff-only origin master
+```
+
+`--prune` deletes local remote-tracking refs (`origin/<branch>`) for
+branches that no longer exist on the remote — this is what turns "the PR is
+closed" into something git can confirm locally, rather than trusting memory
+of an event from several poll cycles ago.
+
+Then remove the now-stale local branch:
+
+```bash
+git branch -vv | grep "$HEAD_BRANCH"   # look for ": gone]" on its remote ref
+git branch -d "$HEAD_BRANCH"
+```
+
+- If `-d` succeeds, done — this is the normal fast-forward-merge case.
+- If `-d` refuses ("not fully merged"), this is expected after a
+  squash-merge (the local commits and the single squashed trunk commit are
+  different SHAs, so git's merge check can't see it). Before forcing
+  anything, confirm **both**:
+  1. The remote-tracking ref shows `: gone]` in `git branch -vv` (confirms
+     the branch was actually removed on the remote, not just unmerged).
+  2. `gh pr view <N> --json state --jq .state` reports `MERGED` or `CLOSED`
+     for the PR this branch belongs to.
+
+  Only with both confirmed, force-delete: `git branch -D "$HEAD_BRANCH"`. If
+  either signal is missing or ambiguous, stop and explain rather than
+  guessing — an unpushed or still-open branch must never be force-deleted.
+- If the branch was never pushed (no remote counterpart to prune), still
+  require the `gh pr view` confirmation above before deleting — it may hold
+  local work unrelated to the PR being closed.
+
+Apply this immediately when: the release-closure flow finishes (folds into
+`references/release-closure.md` step 4b, which already re-syncs `master` —
+add `--prune` to its fetch), the polling loop in `SKILL.md` notices the PR
+was merged or closed externally, or the user reports a PR was closed outside
+this session.
 
 ## Avoid stacking PRs; if unavoidable, rebase every dependent
 

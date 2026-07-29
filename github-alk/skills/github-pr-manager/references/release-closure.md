@@ -96,10 +96,13 @@ Once the PR is merged / closed, return to `master` and pull before
 doing anything else. This catches commits the merge flow may have
 added (squash commits, bot commits, release-note PRs, etc.) and
 guarantees the local tree is the canonical post-release state before
-any further work begins.
+any further work begins. This is the same reconciliation described in
+`references/trunk-based-branching.md` → **Reconcile the local repo when a
+PR closes** — follow it in full, including the local branch cleanup:
 
 ```bash
 git checkout master
+git fetch origin --prune
 git pull --ff-only origin master
 ```
 

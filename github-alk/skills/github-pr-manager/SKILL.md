@@ -320,7 +320,10 @@ On each poll cycle:
 
 Stop polling only when:
 
-- The PR is merged or closed.
+- The PR is merged or closed. Before stopping, reconcile the local repo back
+  to the trunk per `references/trunk-based-branching.md` → **Reconcile the
+  local repo when a PR closes** — this applies even when the merge/close
+  happened externally, not through this session's own release-closure flow.
 - The user explicitly tells you to stop watching it.
 - Five consecutive empty cycles followed by an explicit user instruction to
   pause (the user may prefer to drive the review themselves; ask once via

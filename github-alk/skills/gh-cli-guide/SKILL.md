@@ -1,6 +1,6 @@
 ---
 name: gh-cli-guide
-description: Reference guide for the `gh` GitHub CLI. Invoke when another skill (gstack-gh, gstack-full, gh-security-and-quality, etc.) needs canonical command patterns for issues, PRs, checks, workflow logs, reviewer comments, code scanning, labels, or the REST API. Also used when the user asks "how do I X with gh".
+description: Reference guide for the `gh` GitHub CLI. Invoke when another skill in this plugin (github-pr-manager, gh-actions-debug, sonarcloud, sonarcloud-pr-fix) needs canonical command patterns for issues, PRs, checks, workflow logs, reviewer comments, code scanning, labels, or the REST API. Also used when the user asks "how do I X with gh".
 ---
 
 # gh CLI reference
@@ -202,9 +202,10 @@ gh pr list --state open --json number,title,author,statusCheckRollup \
 
 `dependency.scope` distinguishes `runtime` from `development`. `dismissed_reason`
 must be one of: `fix_started`, `inaccurate`, `no_bandwidth`, `not_used`,
-`tolerable_risk`. For the full fix workflow (triage → bump / override /
-dismiss → validate) see
-[.claude/skills/gh-security-and-quality/SKILL.md](../gh-security-and-quality/SKILL.md).
+`tolerable_risk`. No skill in this plugin currently owns a full Dependabot
+fix workflow — triage the alert list above, bump/override the affected
+dependency or dismiss with a reason, then validate with the repository's
+standard checks (see `github-pr-manager` → **Required validation**).
 
 ## Labels
 
@@ -234,7 +235,7 @@ gh issue list --label automation --state open \
 
 This finds issues with a given label that are **not yet** marked in-progress — useful for pollers that want idempotency.
 
-## Conventions used by label-driven automation (gstack-gh / gstack-full)
+## Conventions used by label-driven automation
 
 When an automation skill drives issues via labels, the following markers are the default convention. Caller skills should expose them as args so repos can override.
 

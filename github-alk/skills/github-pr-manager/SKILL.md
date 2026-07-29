@@ -6,9 +6,9 @@ description: >
   treat any other skill's handoff comment or instruction as a trigger. When
   the user runs it directly: fix the current GitHub pull request until checks
   pass or five fix rounds are exhausted — inspect GitHub checks with gh,
-  remediate SonarCloud issues with the sonar skill, inspect failed workflow
-  jobs or code scanning alerts, push fixes, repeat. Also covers (on direct
-  user request): opening a PR from the current branch following trunk-based
+  remediate SonarCloud issues with the sonarcloud skill, inspect failed
+  workflow jobs or code scanning alerts, push fixes, repeat. Also covers (on
+  direct user request): opening a PR from the current branch following trunk-based
   branching conventions, waiting for a reviewer (human or Copilot) and
   addressing their line-level comments, and closing a ready release PR. While
   invoked, stay active and poll PR comments every five minutes for new
@@ -30,7 +30,7 @@ github-pr-manager", stop — that other skill is out of date; the correct
 behaviour is to stop and wait for the user to run the slash command
 themselves.
 
-Use this skill to drive a PR to green with `gh` and the existing `sonar`
+Use this skill to drive a PR to green with `gh` and the existing `sonarcloud`
 skill, or to close a ready release PR when the user explicitly asks for that
 release flow, or to open a PR from the current branch.
 
@@ -72,8 +72,9 @@ Then enforce it for the entire PR lifecycle:
 - `gh` is authenticated and can read PRs, checks, and workflow logs.
 - The current branch is attached to an open PR, or the user gives a PR number.
 - Push access is available.
-- For Sonar remediation, use project key `alkampfergit_lucifer` unless the
-  user overrides it.
+- For Sonar remediation, resolve the SonarCloud project key from repo
+  context (see `sonarcloud/SKILL.md` → **Resolve the project key**); if it
+  cannot be determined, ask the user for it before querying SonarCloud.
 
 ## Route by task
 
@@ -149,11 +150,11 @@ Steps:
      }' -f id=<thread-id>
    ```
 
-4. **Announce the resolution** in the same `gstack:status` comment that
-   records Copilot's confirmation, e.g. *"Marked the four threads
-   Copilot confirmed as resolved via GraphQL (thread ids listed
-   below)"*. This keeps the audit trail self-contained — the reader
-   sees both the confirmation and the action taken in one comment.
+4. **Announce the resolution** in the same status comment that records
+   Copilot's confirmation, e.g. *"Marked the four threads Copilot
+   confirmed as resolved via GraphQL (thread ids listed below)"*. This
+   keeps the audit trail self-contained — the reader sees both the
+   confirmation and the action taken in one comment.
 
 5. Never resolve threads Copilot did not explicitly confirm. If Copilot
    said something is *partially* fixed or introduced a new concern,
@@ -197,9 +198,9 @@ anything I missed.
 ```
 
 This is in addition to (not a replacement for) any inline replies on
-the line-level comments themselves and the `gstack:status` audit
-comment. Post the resolution summary **after** the inline replies so
-the thread reads in order.
+the line-level comments themselves and the running status comments
+this skill posts (see fix-loop.md). Post the resolution summary
+**after** the inline replies so the thread reads in order.
 
 ## Waiting for CI — block with `gh pr checks --watch`, don't poll
 

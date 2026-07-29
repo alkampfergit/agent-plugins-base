@@ -67,8 +67,12 @@ gh secret list
 # Set a secret from stdin (correct way)
 printf '%s' "the-value" | gh secret set SECRET_NAME
 
-# Set a secret from a .env file (use the sync script)
-zsh scripts/sync-env-to-gh-secrets.zsh KEY1 KEY2 KEY3
+# Sync multiple keys from a local .env file
+while IFS='=' read -r key value; do
+  [ -z "$key" ] && continue
+  case "$key" in \#*) continue ;; esac
+  printf '%s' "$value" | gh secret set "$key"
+done < <(grep -E '^(KEY1|KEY2|KEY3)=' .env)
 ```
 
 **Common pitfall:** `gh secret set NAME --body -` sets the value to literal `"-"`, not stdin. Omit `--body` to read from stdin via pipe.

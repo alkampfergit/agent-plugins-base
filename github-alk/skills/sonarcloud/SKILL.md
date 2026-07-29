@@ -13,6 +13,24 @@ This skill handles reading, analyzing, and fixing SonarCloud issues reported on
 pull requests. SonarCloud runs as a GitHub App and reports results as PR checks
 and comments.
 
+## Goal: zero new issues on the PR
+
+Passing the quality gate is the floor, not the target. The quality gate can go
+green while open MINOR/INFO issues remain on new code (they just didn't cross
+the gate's threshold). Whenever feasible, fix **every** new issue SonarCloud
+reports on the PR's diff — not just the ones blocking the gate — so the PR
+lands with zero open new-code issues.
+
+"Whenever feasible" allows for:
+- An issue that requires a larger refactor or behavior change the user hasn't
+  approved — leave it, and say so explicitly in the PR summary with the issue
+  key and why it wasn't fixed in this round.
+- An issue that is a false positive for this codebase — leave it and flag it
+  to the user rather than silently marking it won't-fix.
+
+Do not stop remediation early just because the gate turned green while
+reachable, in-scope issues are still open.
+
 ## Memory
 
 This skill maintains persistent memory in `memory/` within this skill directory.
@@ -22,6 +40,30 @@ After each session, update memory files with:
 - Files that are chronic hotspots for issues
 
 Before starting work, always read memory files to leverage past experience.
+
+## Resolve the project key
+
+Never hardcode or assume a SonarCloud project key. Before the first API call
+or `curl`, resolve it in this order and stop at the first hit:
+
+1. **Explicit context** — the user stated it this session, or it is recorded
+   in project memory (`memory/patterns.md`) from earlier work in this repo.
+2. **Repo config files** — check for a `sonar.projectKey` value in
+   `sonar-project.properties`, `pom.xml` (`<sonar.projectKey>`),
+   `build.gradle`/`build.gradle.kts` (`property "sonar.projectKey"`), or a
+   `SONAR_PROJECT_KEY` env var in CI workflow files (`.github/workflows/*.yml`).
+3. **Default GitHub-derived pattern** — try `{owner}_{repo}` (SonarCloud's
+   default when a repo is imported directly), e.g. `gh repo view --json
+   nameWithOwner` then substitute `/` with `_`. Verify it actually resolves
+   by probing the issues API — an empty/404 result means this guess is wrong,
+   not that there are no issues.
+4. **Ask the user.** If none of the above resolves to a project key that the
+   SonarCloud API confirms exists, stop and ask the user for the correct
+   key rather than guessing further or silently proceeding with an unverified
+   value.
+
+Once resolved for a session, reuse the same key for every subsequent call —
+don't re-derive it per step.
 
 ## When to use this skill
 
@@ -84,12 +126,16 @@ Present a concise summary table to the user.
 
 ## Fix Issues Workflow
 
+Target zero open new-code issues (see [Goal](#goal-zero-new-issues-on-the-pr)),
+not just a passing gate.
+
 ### Step 1 -- Categorize issues
 
 Group SonarCloud issues by type:
 1. **Bugs** -- Fix first (highest impact)
 2. **Vulnerabilities** -- Fix second
-3. **Code smells** -- Fix third
+3. **Code smells** -- Fix third, including MINOR/INFO ones that don't block
+   the gate
 4. **Duplication** -- Fix last (see [Fix Duplication](#fix-duplication))
 
 ### Step 2 -- Plan fixes with parallel safety
@@ -153,6 +199,10 @@ When the quality gate fails, check these common causes:
 2. **Duplication on new code > threshold** -- See [Fix Duplication](#fix-duplication)
 3. **New bugs/vulnerabilities** -- Must be zero for gate to pass
 4. **New code smells above threshold** -- Reduce count
+
+A green gate does not mean the job is done — re-check the open issue list
+(**Read PR Issues**) and keep fixing toward zero new-code issues per the
+[Goal](#goal-zero-new-issues-on-the-pr) above.
 
 ```bash
 # Quick check: is the quality gate the only failing check?

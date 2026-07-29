@@ -20,21 +20,31 @@ Treat these cases differently:
 ## Sonar path
 
 If Sonar is failing, or if the user explicitly wants Sonar issues fixed, load
-the `sonar` skill and read only the PR fix workflow:
+the `sonarcloud` skill (`github-alk/skills/sonarcloud/SKILL.md`) and follow
+its **Diagnose Quality Gate** and **Fix Issues Workflow** sections.
 
-- `.claude/skills/sonar/SKILL.md`
-- `.claude/skills/sonar/references/fix-workflow.md`
-
-Preferred command:
+Preferred query (no auth needed for public projects):
 
 ```bash
-SONARCLOUD_PROJECT_KEY=alkampfergit_lucifer \
-./.claude/skills/sonar/scripts/fetch_pr_analysis.sh alkampfergit_lucifer "$PR_NUMBER"
+curl -s "https://sonarcloud.io/api/issues/search?componentKeys=<owner>_<repo>&pullRequest=$PR_NUMBER&statuses=OPEN,CONFIRMED&ps=50"
+```
+
+Fall back to the GitHub check-run summary if the API call fails — note the
+SonarCloud GitHub App slug is `sonarqubecloud`, not `sonarcloud`:
+
+```bash
+gh api repos/<owner>/<repo>/commits/<sha>/check-runs \
+  --jq '.check_runs[] | select(.app.slug == "sonarqubecloud") | {name, conclusion, summary: .output.summary}'
 ```
 
 Use the returned issue list as the fix target inventory. Sonar may be green
 even when other GitHub checks still fail, so do not stop after a green Sonar
-result.
+result. A green Sonar check also does not mean every new-code issue is fixed
+— target zero open new-code issues, not just a passing gate (see
+`sonarcloud/SKILL.md` → **Goal: zero new issues on the PR**). Resolve the
+project key per `sonarcloud/SKILL.md` → **Resolve the project key**; ask the
+user if it cannot be determined from repo context (see `SKILL.md` → Inputs
+and assumptions).
 
 ## Failed GitHub Actions job path
 

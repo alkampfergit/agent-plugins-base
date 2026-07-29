@@ -11,12 +11,19 @@ Use this skill for PR-scoped SonarCloud cleanup work in this repository.
 
 Find the SonarCloud issues attached to the current branch's pull request, apply the smallest safe fixes, verify locally, push the branch, and check whether SonarCloud has refreshed on the latest commit.
 
+Target zero open new-code issues on the PR, not just a passing quality gate —
+a green gate can still leave MINOR/INFO issues open on new code. Fix every
+in-scope issue when feasible; for anything left open, say so explicitly in
+the final report with the issue key and the reason (larger refactor needed,
+suspected false positive, etc.).
+
 ## Default assumptions
 
 - Repo root is the current working directory.
 - The branch usually has an open GitHub pull request.
-- This repo uses Beads for task tracking.
-- The usual SonarCloud project key here is `alkampfergit_azdo-cli`.
+- Do not hardcode or assume a SonarCloud project key — resolve it per
+  `sonarcloud/SKILL.md` → **Resolve the project key**, and ask the user for
+  it if it cannot be determined from repo context.
 
 ## Workflow
 
@@ -24,18 +31,16 @@ Find the SonarCloud issues attached to the current branch's pull request, apply 
    - Read `AGENTS.md` and `CLAUDE.md`.
    - Run `git status --short --branch`.
    - Run `git rev-parse --abbrev-ref HEAD`.
-   - Run `bd prime`.
 
-2. Create and claim a Beads issue before editing code.
-   - Example:
-     - `bd create --title "Fix SonarCloud pull request issues" --type bug --priority 1 --label "sonarcloud,quality" --description "..."`
-     - `bd update <id> --claim`
-
-3. Resolve the current branch to a GitHub pull request number.
+2. Resolve the current branch to a GitHub pull request number.
    - Preferred:
      - `curl -fsSL "https://api.github.com/repos/<owner>/<repo>/pulls?state=open&head=<owner>:<branch>"`
    - Extract the PR number from the response.
    - If there is no open PR, stop and tell the user.
+
+3. Resolve the SonarCloud project key (see `sonarcloud/SKILL.md` →
+   **Resolve the project key**) — ask the user if it can't be determined
+   from repo context. Reuse it for every call below.
 
 4. Query SonarCloud for PR issues.
    - Preferred issue query:
@@ -71,12 +76,7 @@ Find the SonarCloud issues attached to the current branch's pull request, apply 
      - `git add <files>`
      - `git commit -m "<message>"`
      - `git pull --rebase`
-     - `bd dolt push`
      - `git push`
-   - If `bd dolt push` fails because no Dolt remote is configured, do not invent one.
-     - Report the exact failure.
-     - Create a follow-up Beads issue for the missing Dolt remote if one does not already exist.
-     - Still complete `git push`.
 
 9. Recheck remote status.
    - Confirm branch state:

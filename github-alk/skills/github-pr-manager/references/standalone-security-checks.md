@@ -8,9 +8,8 @@ Some failures are not normal workflow jobs. A PR can produce a standalone
 3. Read annotations and code scanning alerts.
 
 For the exact `gh api` call forms, see `gh-cli-guide/SKILL.md` →
-**Code scanning & standalone security checks**. For this repo substitute
-`<owner>/<repo>` with `alkampfergit/lucifer` and use the PR number as
-`$PR_NUMBER`.
+**Code scanning & standalone security checks**. Resolve `<owner>/<repo>` with
+`gh repo view --json nameWithOwner` and use the PR number as `$PR_NUMBER`.
 
 - `gh api` endpoints that contain `?` must be quoted under `zsh`.
 - Use code scanning alerts for CodeQL-style failures; `gh run view` will not

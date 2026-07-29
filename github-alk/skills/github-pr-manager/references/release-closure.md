@@ -19,7 +19,9 @@ gh pr view "$PR_NUMBER" --json headRefName,baseRefName,url,title
 ```
 
 If the head branch matches `release/<semver>`, treat that version as the
-proposed tag.
+proposed tag. See `references/trunk-based-branching.md` for how release
+branches fit into an otherwise trunk-based flow (short-lived, cut from the
+trunk, no unrelated work landed on it).
 
 Before doing any release operation, ask the user to confirm the tag or propose
 another one. Do not create or push a tag without explicit confirmation.
@@ -128,7 +130,8 @@ Template:
 If no fix rounds were needed, the comment should say "No fix rounds needed —
 all checks passed on first push."
 
-Branch cleanup requirements:
+Branch cleanup requirements (see `references/trunk-based-branching.md` for
+the underlying rationale):
 
 - Delete the old local release branch after the PR is closed.
 - Delete the old remote release branch after the PR is closed.

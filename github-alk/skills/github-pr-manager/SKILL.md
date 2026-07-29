@@ -1,32 +1,32 @@
 ---
-name: github-pr-fixer
+name: github-pr-manager
 description: >
   MANUAL SLASH-ONLY skill. Invoke EXCLUSIVELY when the user types
-  `/github-pr-fixer`. Never auto-invoke, never chain from another skill, never
+  `/github-pr-manager`. Never auto-invoke, never chain from another skill, never
   treat any other skill's handoff comment or instruction as a trigger. When
   the user runs it directly: fix the current GitHub pull request until checks
   pass or five fix rounds are exhausted — inspect GitHub checks with gh,
   remediate SonarCloud issues with the sonar skill, inspect failed workflow
   jobs or code scanning alerts, push fixes, repeat. Also covers (on direct
-  user request): opening a PR from the current branch, waiting for a reviewer
-  (human or Copilot) and addressing their line-level comments, and closing a
-  ready release PR. While invoked, stay active and poll PR comments every
-  five minutes for new feedback or an explicit closure instruction — do not
-  go idle.
+  user request): opening a PR from the current branch following trunk-based
+  branching conventions, waiting for a reviewer (human or Copilot) and
+  addressing their line-level comments, and closing a ready release PR. While
+  invoked, stay active and poll PR comments every five minutes for new
+  feedback or an explicit closure instruction — do not go idle.
 disable-model-invocation: true
 metadata:
   author: codex
-  version: 1.4.0
+  version: 1.5.0
   category: workflow
 ---
 
-# Skill: GitHub PR Fixer
+# Skill: GitHub PR Manager
 
 **Invocation rule (hard):** this skill runs ONLY when the user explicitly
-types `/github-pr-fixer`. It is never auto-invoked, never chained from
+types `/github-pr-manager`. It is never auto-invoked, never chained from
 another skill, and never triggered by a handoff comment, label, or PR event.
 If you reach this file because another skill suggested you "invoke
-github-pr-fixer", stop — that other skill is out of date; the correct
+github-pr-manager", stop — that other skill is out of date; the correct
 behaviour is to stop and wait for the user to run the slash command
 themselves.
 
@@ -84,6 +84,7 @@ Then enforce it for the entire PR lifecycle:
 | Wait for a reviewer (human or Copilot) and address their comments | `references/reviewer-comments.md` |
 | Close a ready PR and cut a release tag | `references/pr-resolution.md`, then `references/release-closure.md` |
 | Investigate a known standalone CodeQL-style failure pattern | `references/standalone-security-checks.md` |
+| Decide how to branch, rebase, or clean up under trunk-based development | `references/trunk-based-branching.md` |
 
 ## Round limit
 

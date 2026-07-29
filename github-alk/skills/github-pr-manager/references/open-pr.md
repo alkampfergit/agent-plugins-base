@@ -28,7 +28,10 @@ opening a duplicate.
 
 Use repository context and git state to verify the intended base branch.
 Prefer the tracked integration branch already used by the repository flow.
-Do not guess.
+Do not guess. Under trunk-based development the base is normally
+`master`/`main` directly — see `references/trunk-based-branching.md` for how
+to confirm there is no separate long-lived integration branch and how to
+handle stacked branches if the current branch depends on another open PR.
 
 Helpful commands: `git remote show origin` and `gh repo view --json defaultBranchRef` (see gh-cli-guide → **Authentication & context**).
 

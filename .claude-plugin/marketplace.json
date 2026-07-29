@@ -1,0 +1,13 @@
+{
+  "name": "agent-plugins-base",
+  "owner": {
+    "name": "alkampfer"
+  },
+  "plugins": [
+    {
+      "name": "github-alk",
+      "source": "./github-alk",
+      "description": "GitHub CLI, CI, PR, and SonarCloud automation skills, ported from azdo-cli."
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "github-alk",
+  "version": "0.1.1",
+  "description": "GitHub CLI, CI, PR, and SonarCloud automation skills, ported from azdo-cli.",
+  "author": {
+    "name": "alkampfer"
+  },
+  "repository": "https://github.com/alkampfergit/agent-plugins-base",
+  "keywords": ["github", "gh-cli", "pull-requests", "ci", "sonarcloud"]
+}

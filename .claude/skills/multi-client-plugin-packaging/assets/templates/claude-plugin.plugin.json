@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "REPLACE_ME-plugin-name",
+  "displayName": "REPLACE_ME Display Name",
+  "description": "REPLACE_ME one-sentence description shared across every manifest.",
+  "author": { "name": "REPLACE_ME", "url": "REPLACE_ME" },
+  "repository": "REPLACE_ME",
+  "license": "MIT",
+  "keywords": ["REPLACE_ME"]
+}

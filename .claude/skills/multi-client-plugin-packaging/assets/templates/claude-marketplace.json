@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "REPLACE_ME-marketplace-name",
+  "owner": { "name": "REPLACE_ME", "url": "REPLACE_ME" },
+  "description": "REPLACE_ME.",
+  "metadata": { "pluginRoot": "./plugins" },
+  "plugins": [
+    {
+      "name": "REPLACE_ME-plugin-name",
+      "source": "./plugins/REPLACE_ME-plugin-name",
+      "description": "REPLACE_ME one-sentence description shared across every manifest.",
+      "category": "development"
+    }
+  ],
+  "renames": {}
+}

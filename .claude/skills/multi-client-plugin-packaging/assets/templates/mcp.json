@@ -1,0 +1,12 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
+  "mcpServers": {
+    "REPLACE_ME-server-name": {
+      "type": "stdio",
+      "command": "./bin/REPLACE_ME",
+      "args": ["--data", "${PLUGIN_DATA}/REPLACE_ME"],
+      "env": {},
+      "cwd": "${PLUGIN_ROOT}"
+    }
+  }
+}

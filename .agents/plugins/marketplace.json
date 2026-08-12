@@ -1,0 +1,20 @@
+{
+  "name": "agent-plugins-base",
+  "interface": {
+    "displayName": "Agent Plugins Base"
+  },
+  "plugins": [
+    {
+      "name": "github-alk",
+      "source": {
+        "source": "local",
+        "path": "./plugins/github-alk"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}

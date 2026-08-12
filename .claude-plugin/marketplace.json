@@ -1,13 +1,19 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
   "name": "agent-plugins-base",
   "owner": {
     "name": "alkampfer"
   },
+  "description": "Alkampfer's cross-client agent plugins.",
+  "metadata": {
+    "pluginRoot": "./plugins"
+  },
   "plugins": [
     {
       "name": "github-alk",
-      "source": "./github-alk",
+      "source": "./plugins/github-alk",
       "description": "GitHub CLI, CI, PR, and SonarCloud automation skills, ported from azdo-cli."
     }
-  ]
+  ],
+  "renames": {}
 }

@@ -1,0 +1,19 @@
+{
+  "name": "github-alk",
+  "version": "0.1.1",
+  "description": "GitHub CLI, CI, PR, and SonarCloud automation skills, ported from azdo-cli.",
+  "author": {
+    "name": "alkampfer"
+  },
+  "repository": "https://github.com/alkampfergit/agent-plugins-base",
+  "keywords": ["github", "gh-cli", "pull-requests", "ci", "sonarcloud"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "GitHub Alk",
+    "shortDescription": "GitHub CLI, CI, PR, and SonarCloud automation",
+    "longDescription": "Skills for debugging GitHub Actions runs, managing pull requests end-to-end (open, review, fix checks, close), and resolving SonarCloud issues using the gh CLI.",
+    "developerName": "alkampfer",
+    "category": "Developer Tools",
+    "capabilities": ["Read", "Write"]
+  }
+}

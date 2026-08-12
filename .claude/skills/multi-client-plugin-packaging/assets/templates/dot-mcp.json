@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "REPLACE_ME-server-name": {
+      "command": "${CLAUDE_PLUGIN_ROOT}/bin/REPLACE_ME",
+      "args": ["--data", "${CLAUDE_PLUGIN_DATA}/REPLACE_ME"]
+    }
+  }
+}

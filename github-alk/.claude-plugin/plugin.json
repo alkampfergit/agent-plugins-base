@@ -1,8 +1,0 @@
-{
-  "name": "github-alk",
-  "version": "0.1.1",
-  "description": "GitHub CLI, CI, PR, and SonarCloud automation skills, ported from azdo-cli.",
-  "author": {
-    "name": "alkampfer"
-  }
-}

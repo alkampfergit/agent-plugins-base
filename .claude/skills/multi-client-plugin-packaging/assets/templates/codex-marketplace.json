@@ -1,0 +1,12 @@
+{
+  "name": "REPLACE_ME-marketplace-name",
+  "interface": { "displayName": "REPLACE_ME Display Name" },
+  "plugins": [
+    {
+      "name": "REPLACE_ME-plugin-name",
+      "source": { "source": "local", "path": "./plugins/REPLACE_ME-plugin-name" },
+      "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" },
+      "category": "Developer Tools"
+    }
+  ]
+}

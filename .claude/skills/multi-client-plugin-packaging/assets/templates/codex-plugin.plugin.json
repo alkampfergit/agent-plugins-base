@@ -1,0 +1,20 @@
+{
+  "name": "REPLACE_ME-plugin-name",
+  "version": "0.1.0",
+  "description": "REPLACE_ME one-sentence description shared across every manifest.",
+  "author": { "name": "REPLACE_ME", "url": "REPLACE_ME" },
+  "homepage": "REPLACE_ME",
+  "repository": "REPLACE_ME",
+  "license": "MIT",
+  "keywords": ["REPLACE_ME"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "REPLACE_ME Display Name",
+    "shortDescription": "REPLACE_ME short store-front line",
+    "longDescription": "REPLACE_ME longer store-front description.",
+    "developerName": "REPLACE_ME",
+    "category": "Developer Tools",
+    "capabilities": ["Read", "Write"],
+    "websiteURL": "REPLACE_ME"
+  }
+}

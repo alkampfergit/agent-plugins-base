@@ -1,0 +1,19 @@
+{
+  "name": "agent-plugins-base",
+  "owner": {
+    "name": "alkampfer"
+  },
+  "metadata": {
+    "description": "Alkampfer's cross-client agent plugins.",
+    "version": "1.0.0",
+    "pluginRoot": "./plugins"
+  },
+  "plugins": [
+    {
+      "name": "github-alk",
+      "version": "0.1.1",
+      "description": "GitHub CLI, CI, PR, and SonarCloud automation skills, ported from azdo-cli.",
+      "source": "./plugins/github-alk"
+    }
+  ]
+}

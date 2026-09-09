@@ -77,18 +77,22 @@ done < <(grep -E '^(KEY1|KEY2|KEY3)=' .env)
 
 **Common pitfall:** `gh secret set NAME --body -` sets the value to literal `"-"`, not stdin. Omit `--body` to read from stdin via pipe.
 
-### 5. Watch a run in real-time after pushing a fix
+### 5. Check the resulting run once; optionally watch
 
 ```bash
 # Push the fix
 git push
 
-# Wait a few seconds for the run to appear
-sleep 5
-
-# Find the new run
+# Find the newest run once
 gh run list --branch "$(git rev-parse --abbrev-ref HEAD)" --limit 2
+```
 
+By default, report the status from that snapshot and return. If the new run has
+not appeared yet or is still pending, say so instead of waiting.
+
+Only when the user explicitly asks to wait, watch, monitor, or keep checking:
+
+```bash
 # Watch it until completion
 gh run watch <run-id> --exit-status
 ```

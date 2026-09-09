@@ -29,13 +29,17 @@ not yet submitted.
 `gh pr view` alone may under-report pending reviewer requests, especially for
 GitHub Apps — always cross-check with the API endpoint.
 
-## Step 2: Wait for the review to land
+## Step 2: Inspect review state; wait only when requested
 
-Poll until the reviewer disappears from `requested_reviewers` **AND** their
-review shows up under `/pulls/<N>/reviews`, or until a reasonable deadline
-(Copilot typically takes 2–5 minutes for a medium-sized PR; 10 minutes is a
-safe upper bound). Use the polling template in gh-cli-guide →
-**Reviews & reviewer comments → Poll for a pending review to land**.
+Query `requested_reviewers` and `/pulls/<N>/reviews` once. If the reviewer is
+still pending, report that state and end the invocation.
+
+Only when the user explicitly asks to wait, watch, monitor, or poll, continue
+until the reviewer disappears from `requested_reviewers` **AND** their review
+shows up under `/pulls/<N>/reviews`, or until a reasonable deadline (Copilot
+typically takes 2–5 minutes for a medium-sized PR; 10 minutes is a safe upper
+bound). Use the opt-in polling template in gh-cli-guide → **Reviews & reviewer
+comments → Inspect or poll for a pending review**.
 
 Note: Copilot may post a `COMMENTED` review (no explicit approve/request
 changes). An empty filtered `reviews` count combined with the reviewer having
@@ -88,8 +92,9 @@ Each round of reviewer-comment fixes follows the same shape as `fix-loop`:
    **Local validation:** lint ✓ | test ✓ | build ✓
    ```
 
-6. **Re-watch checks**. Pushing a new commit re-triggers CI and may cause a
-   re-review.
+6. **Refresh checks once**. Pushing a new commit re-triggers CI and may cause a
+   re-review. Report pending state and return unless monitoring was explicitly
+   requested; only then use watch mode.
 
 ## Stop conditions
 
@@ -98,10 +103,12 @@ Stop reviewer-comment work when one of:
 - Every comment is either addressed with a code/doc change, or explicitly
   marked as "out of scope / won't fix" with reasoning captured in the PR
   comment.
+- One reviewer-comment round has completed in one-pass mode.
 - The user says stop.
-- Five reviewer-comment rounds have been attempted (mirrors the `fix-loop`
-  budget). After exhausting the budget, do not resume automatically —
-  wait for an explicit user instruction to take another pass.
+- Five reviewer-comment rounds have been attempted in explicitly requested
+  monitoring mode (mirrors the `fix-loop` budget). After exhausting the budget,
+  do not resume automatically; wait for an explicit user instruction to take
+  another pass.
 
 When stopping, report:
 
@@ -120,5 +127,6 @@ When stopping, report:
   branch but in lines that predate the PR) should still be flagged to the
   user — but let the user decide whether to fix them here or open a
   separate PR.
-- If Copilot's review times out or never arrives, report that fact instead
-  of silently proceeding.
+- In monitoring mode, if Copilot's review times out or never arrives, report
+  that fact instead of silently proceeding. In one-pass mode, simply report
+  that the review is still pending.

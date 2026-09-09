@@ -85,5 +85,7 @@ After creation, report:
 - head branch
 - base branch
 
-If checks should be watched immediately after creation, continue with
-`references/pr-resolution.md` and `references/check-diagnosis.md`.
+Inspect checks once after creation only when that is part of the request. Watch
+or poll them through `references/pr-resolution.md` and
+`references/check-diagnosis.md` only when the user explicitly requested
+monitoring.

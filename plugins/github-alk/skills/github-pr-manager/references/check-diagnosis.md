@@ -4,12 +4,17 @@ For raw `gh` syntax (checks, runs, jobs, APIs) see `gh-cli-guide/SKILL.md` →
 **Checks & workflow runs**, **Code scanning & standalone security checks**.
 This file covers the diagnostic flow.
 
-## Wait for the current check cycle
+## Inspect the current check cycle
 
-Use watch mode before starting a new diagnosis so you do not read half-finished
-results. Run `gh pr checks "$PR_NUMBER" --watch --fail-fast` then fetch the
-structured status via `gh pr checks "$PR_NUMBER" --json name,state,link,workflow,bucket`
-and/or `gh pr view "$PR_NUMBER" --json statusCheckRollup`.
+Fetch the structured status once via
+`gh pr checks "$PR_NUMBER" --json name,state,link,workflow,bucket` and/or
+`gh pr view "$PR_NUMBER" --json statusCheckRollup`.
+
+In one-pass mode, diagnose terminal failures visible in that snapshot. If
+checks are pending, report them and end the invocation. Only when the user
+explicitly requested monitoring, run
+`gh pr checks "$PR_NUMBER" --watch --fail-fast` before fetching a fresh
+structured snapshot.
 
 Treat these cases differently:
 

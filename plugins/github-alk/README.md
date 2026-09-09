@@ -7,8 +7,9 @@ GitHub CLI, CI, PR, and SonarCloud automation skills, ported from azdo-cli.
 - **gh-cli-guide** — reference guide for `gh` command patterns; other skills in this
   plugin call into it rather than duplicating raw commands.
 - **gh-actions-debug** — diagnose and fix failing GitHub Actions workflows.
-- **github-pr-manager** — manual, slash-only: fix a PR until checks pass, open PRs,
-  handle reviewer comments, close release PRs.
+- **github-pr-manager** — manual, slash-only: inspect or fix a PR in one pass by
+  default; optionally monitor when explicitly requested; open PRs, handle
+  reviewer comments, and close release PRs.
 - **sonarcloud** — analyze and fix SonarCloud issues on pull requests.
 - **sonarcloud-pr-fix** — end-to-end SonarCloud cleanup for the current branch's PR.
 

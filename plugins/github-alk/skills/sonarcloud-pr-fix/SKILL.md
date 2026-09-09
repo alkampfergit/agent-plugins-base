@@ -99,5 +99,8 @@ suspected false positive, etc.).
 ## Notes
 
 - SonarCloud can lag behind GitHub pushes. If SonarCloud still shows an older `analysisDate` or commit SHA, say so explicitly instead of claiming the issues remain.
+- Requery SonarCloud once after the push by default. Poll for a refreshed
+  analysis only when the user explicitly asks to wait, watch, monitor, or keep
+  checking.
 - GitHub Actions may reveal stricter typecheck failures than `npm test` if `typecheck` is not part of the test script. Always run `npm run typecheck` for TypeScript changes.
 - Do not close the loop with "ready to push". Push the branch unless the user explicitly tells you not to.

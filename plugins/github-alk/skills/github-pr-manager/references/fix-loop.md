@@ -19,7 +19,7 @@ npm test
 npm run build
 ```
 
-## Commit, push, and re-watch
+## Commit, push, and refresh once
 
 Use one commit per round unless the branch already contains uncommitted user
 changes that must be preserved.
@@ -59,7 +59,13 @@ what the fix does. Each bullet under Changes should name the exact file and
 the concrete change, not vague summaries like "fixed code smells". Include the
 failing check name and link when available.
 
-## Re-watch checks
+## Refresh check status
 
-Run `gh pr checks "$PR_NUMBER" --watch --fail-fast` (see gh-cli-guide →
-**Checks & workflow runs**). Then return to the check-diagnosis workflow.
+Run `gh pr checks "$PR_NUMBER"` once after the push (see gh-cli-guide →
+**Checks & workflow runs**), report the resulting snapshot, and end the
+invocation in one-pass mode. Do not wait if the new check cycle is pending.
+
+Only in explicitly requested monitoring mode, run
+`gh pr checks "$PR_NUMBER" --watch --fail-fast`, then return to the
+check-diagnosis workflow. Repeated fix rounds are limited by the monitoring
+budget in the parent skill.

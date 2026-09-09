@@ -9,6 +9,14 @@ This skill is a **reference** — it does not perform actions on its own. Other 
 
 Keep this file as the single source of truth for `gh` syntax. Action-oriented skills should link to sections here rather than duplicating raw commands.
 
+## Monitoring policy
+
+Commands that return a current snapshot are the default. Use `--watch`,
+`sleep`, or repeated API calls only when the user explicitly asks to wait,
+watch, monitor, poll, keep checking, or continue until a remote condition.
+Examples of watch and polling commands below are opt-in references; their
+presence does not authorize an action-oriented skill to monitor by default.
+
 ## Prerequisites
 
 - `gh` installed (`gh --version`)
@@ -99,14 +107,16 @@ gh pr merge 456 --auto --squash     # enable auto-merge when checks pass
 
 ## Checks & workflow runs
 
-### Wait for / inspect checks on a PR
+### Inspect checks once / optionally watch
 ```bash
 gh pr checks                         # quick status of current PR
-gh pr checks "$PR" --watch --fail-fast
 gh pr checks "$PR" --json name,state,link,workflow,bucket
+gh pr checks "$PR" --watch --fail-fast # explicit monitoring request only
 ```
 
-Use `--watch --fail-fast` before diagnosing so you do not read half-finished results.
+By default, diagnose only terminal failures visible in the snapshot and report
+pending checks. Use `--watch --fail-fast` only after explicit monitoring
+authorization.
 
 ### Runs & failing jobs
 ```bash
@@ -145,8 +155,11 @@ gh api repos/<owner>/<repo>/issues/<N>/comments \
   --jq '.[] | {id,user:.user.login,created_at,body: (.body[:200])}'
 ```
 
-### Poll for a pending review to land
-Useful when a bot reviewer (Copilot, etc.) takes a few minutes.
+### Inspect or poll for a pending review
+
+By default, query `requested_reviewers` and `reviews` once, report the result,
+and return. The loop below is useful only when the user explicitly asks to wait
+for a bot reviewer such as Copilot.
 
 ```bash
 for i in $(seq 1 20); do

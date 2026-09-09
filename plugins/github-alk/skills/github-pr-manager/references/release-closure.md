@@ -47,8 +47,13 @@ If the branch is already up to date, do not rebase just for the sake of it.
 
 ## 3. Ensure checks are green before release
 
-Run `gh pr checks "$PR_NUMBER" --watch --fail-fast` (see gh-cli-guide →
-**Checks & workflow runs**). Do not proceed if required checks are failing.
+Run `gh pr checks "$PR_NUMBER"` once (see gh-cli-guide → **Checks & workflow
+runs**). Proceed only if all required checks are already green. If checks are
+pending, report that state and end the invocation; do not wait implicitly.
+
+Only when the user explicitly asks to wait, watch, monitor, or keep checking,
+use `gh pr checks "$PR_NUMBER" --watch --fail-fast`. Do not proceed if required
+checks fail.
 
 ## 4. Fast-forward master, tag, push, close PR, and delete branches
 

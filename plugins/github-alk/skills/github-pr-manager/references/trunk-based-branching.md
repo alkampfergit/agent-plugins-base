@@ -98,8 +98,8 @@ git pull --ff-only origin master
 
 `--prune` deletes local remote-tracking refs (`origin/<branch>`) for
 branches that no longer exist on the remote — this is what turns "the PR is
-closed" into something git can confirm locally, rather than trusting memory
-of an event from several poll cycles ago.
+closed" into something git can confirm locally, rather than trusting an
+earlier status observation.
 
 Then remove the now-stale local branch:
 
@@ -127,9 +127,9 @@ git branch -d "$HEAD_BRANCH"
 
 Apply this immediately when: the release-closure flow finishes (folds into
 `references/release-closure.md` step 4b, which already re-syncs `master` —
-add `--prune` to its fetch), the polling loop in `SKILL.md` notices the PR
-was merged or closed externally, or the user reports a PR was closed outside
-this session.
+add `--prune` to its fetch), an explicitly requested monitoring loop notices
+the PR was merged or closed externally, a one-pass status check finds it
+closed, or the user reports a PR was closed outside this session.
 
 ## Avoid stacking PRs; if unavoidable, rebase every dependent
 

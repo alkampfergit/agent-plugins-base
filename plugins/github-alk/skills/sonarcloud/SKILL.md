@@ -226,17 +226,17 @@ Duplication is the most common quality gate failure in this project.
 
 SonarCloud flags duplicated blocks (usually 10+ lines of identical or near-identical code).
 
-### Common duplication patterns in this project
+### Common duplication patterns
 
 1. **Command boilerplate** -- ID parsing, org/project validation, error handling
    repeated across command files
-   - **Fix**: Extract to shared helpers (already done in `src/services/command-helpers.ts`)
+   - **Fix**: Extract to shared helpers in a utilities module
 
 2. **Test setup** -- Same mock setup repeated across test files
-   - **Fix**: Extract to shared test utilities in `tests/unit/helpers/`
+   - **Fix**: Extract to shared test utilities
 
 3. **API call patterns** -- Similar fetch/auth/error patterns
-   - **Fix**: Use shared `fetchWithErrors` from `azdo-client.ts`
+   - **Fix**: Extract shared request/response handling into a dedicated utility
 
 ### Duplication fix strategy
 

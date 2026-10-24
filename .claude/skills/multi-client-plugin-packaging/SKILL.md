@@ -64,11 +64,7 @@ client and never duplicate skill content between clients.
 └── README.md
 ```
 
-This repo currently has one plugin (`github-alk/`) sitting at repo root instead of
-under `plugins/`, and no `AGENTS.md`/Copilot/Codex catalogs yet. That is a valid
-Claude-only starting point but not yet multi-client — apply the checklist below to
-close the gap. Don't do it silently on a casual request; confirm with the user before
-moving `github-alk/` (a path change breaks any existing local install references).
+This repository now stores each plugin under `plugins/<name>/`, keeps the repository instructions in `AGENTS.md`, and maintains Claude, Copilot, and Codex marketplace catalogs at the root. Add new plugins under `plugins/` and list each one in all three catalogs. Do not move an existing plugin without explicit approval because that can break installation references.
 
 ## Non-negotiable structural rules
 

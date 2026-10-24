@@ -13,6 +13,11 @@
       "name": "github-alk",
       "source": "./plugins/github-alk",
       "description": "GitHub CLI, CI, PR, and SonarCloud automation skills, ported from azdo-cli."
+    },
+    {
+      "name": "speckit-alk",
+      "source": "./plugins/speckit-alk",
+      "description": "Claude-first, human-approved GitHub issue-to-PR workflows built around upstream GitHub Spec Kit skills."
     }
   ],
   "renames": {}

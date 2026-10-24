@@ -1,0 +1,20 @@
+{
+  "name": "speckit-alk",
+  "version": "0.1.0",
+  "description": "Claude-first, human-approved GitHub issue-to-PR workflows built around upstream GitHub Spec Kit skills.",
+  "author": { "name": "alkampfer", "url": "https://github.com/alkampfergit" },
+  "homepage": "https://github.com/alkampfergit/agent-plugins-base/tree/master/plugins/speckit-alk",
+  "repository": "https://github.com/alkampfergit/agent-plugins-base",
+  "license": "MIT",
+  "keywords": ["speckit", "github", "issue-to-pr", "spec-driven-development", "claude", "codex", "copilot"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Spec Kit Alk",
+    "shortDescription": "Human-approved GitHub Spec Kit issue-to-PR workflows",
+    "longDescription": "Claude-first skills that drive GitHub issues through the upstream Spec Kit phases with explicit owner approval gates, with safe single-cycle fallbacks for other clients.",
+    "developerName": "alkampfer",
+    "category": "Developer Tools",
+    "capabilities": ["Read", "Write"],
+    "websiteURL": "https://github.com/alkampfergit/agent-plugins-base/tree/master/plugins/speckit-alk"
+  }
+}

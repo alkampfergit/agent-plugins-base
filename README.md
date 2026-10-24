@@ -5,24 +5,28 @@ Codex — packaged from one shared source tree.
 
 ## Plugins
 
-| Plugin | Description |
-|---|---|
-| [`github-alk`](plugins/github-alk) | GitHub CLI, CI, PR, and SonarCloud automation skills. |
+| Plugin | Skills | Agents | Description |
+|---|---|---:|---|
+| [`github-alk`](plugins/github-alk) | `gh-actions-debug`, `gh-cli-guide`, `github-pr-manager`, `sonarcloud`, `sonarcloud-pr-fix` | 0 | GitHub CLI, CI, PR, and SonarCloud automation. |
+| [`speckit-alk`](plugins/speckit-alk) | `speckit-full`, `speckit-gh` | 0 | Claude-first, human-approved GitHub issue-to-PR workflows using upstream Spec Kit. |
 
 ## Install
 
-```
+```text
 # Claude Code
 /plugin marketplace add alkampfergit/agent-plugins-base
 /plugin install github-alk@agent-plugins-base
+/plugin install speckit-alk@agent-plugins-base
 
 # GitHub Copilot CLI
 copilot plugin marketplace add alkampfergit/agent-plugins-base
 copilot plugin install github-alk@agent-plugins-base
+copilot plugin install speckit-alk@agent-plugins-base
 
 # OpenAI Codex CLI
 codex plugin marketplace add alkampfergit/agent-plugins-base
-codex plugin install github-alk
+codex plugin add github-alk@agent-plugins-base
+codex plugin add speckit-alk@agent-plugins-base
 ```
 
 ## Contributing a plugin

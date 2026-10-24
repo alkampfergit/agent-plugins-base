@@ -18,7 +18,7 @@ Take one GitHub issue through specification, planning, implementation, testing, 
 - Require `.specify/` plus the upstream `speckit-specify`, `speckit-clarify`, `speckit-plan`, `speckit-tasks`, and `speckit-implement` workflows. Confirm paths and commands from the installed project instead of assuming a version-specific layout. Do not bootstrap Spec Kit from this skill.
 - Accept live-cycle authorization either from a direct user confirmation after the preview or from a matching, previously approved `speckit-full` run. That authorization does not replace the human approver's GitHub approval at each Spec Kit gate.
 - Resolve the human approver. For personal repositories, use the owner login. For organization-owned repositories, ask the user to identify the authorized human maintainer. Never treat the authenticated `gh` account, a bot, or the organization login as human approval.
-- Post questions, proposals, status, and approval requests on the active GitHub issue or PR, not in the agent console. Accept approval only from the resolved human approver. If identity or intent is ambiguous, stop and ask.
+- Before standalone live-run authorization, use the agent console for preflight questions and blockers, the read-only preview, and initial user consent. After authorization (directly or through a matching approved `speckit-full` run), post all workflow questions, proposals, status, and approval requests only on the active GitHub issue or PR. Accept Spec Kit gate approval only from the resolved human approver in that GitHub thread. If identity or intent is ambiguous, stop and ask in the channel appropriate to the authorization state.
 - Never auto-merge, close, release, tag, or change the requested scope. End with a review-ready PR and report its URL. A later explicit user request is required for merge/close/release work.
 - Before edits on an existing PR, check out and verify its head branch. Never push to a branch based only on a remembered branch name.
 
@@ -42,4 +42,4 @@ The key gates are:
 6. Keep CI and review work on the verified PR branch. Read top-level comments, submitted reviews, and inline review comments/replies before acting. Do not infer approval from green CI or a non-owner comment.
 7. Mark the PR ready only after implementation and checks pass. Stop before merge or close.
 
-If a step fails, preserve the issue, branch, and PR state; post a concise failure status to the active GitHub thread and stop. Do not retry actions with external side effects blindly.
+If a step fails, preserve the issue, branch, and PR state; report a concise failure status in the console before live-run authorization or on the active GitHub thread after authorization, then stop. Do not retry actions with external side effects blindly.

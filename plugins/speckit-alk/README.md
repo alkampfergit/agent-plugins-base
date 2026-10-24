@@ -16,6 +16,7 @@ None. The portable unit is the two skills; clients may choose their own built-in
 - `gh` installed and authenticated with repository read/write access.
 - The target repository has Git remote `origin`, a clean checkout on its default branch, and Git author identity configured.
 - GitHub Spec Kit is initialized in the target project with `specify init`; upstream Spec Kit skills and templates are supplied by that project setup, not this plugin.
+- The installed Specify workflow must have a verified mechanism that creates and switches to the expected non-default feature branch and reports the expected branch and feature directory. When using the optional git extension, verify that its `before_specify` hook is installed, enabled, and invoked by that workflow; otherwise verify an equivalent installed branch-creation mechanism. Check this before claiming an issue; stop if it is absent, disabled, or unverifiable. See [preflight and branch verification](skills/speckit-gh/references/flow.md).
 - A human approver is identifiable from GitHub. For organization-owned repositories, configure/confirm a human approver rather than treating the organization login or the automation account as approval.
 
 ## Client behavior

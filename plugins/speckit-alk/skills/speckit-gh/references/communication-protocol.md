@@ -4,6 +4,8 @@ Every approval poll and comment in `speckit-gh` must follow this protocol.
 
 ## Markers and channels
 
+Before standalone live-run authorization, use the console for preflight questions and blockers, the read-only preview, and initial user consent; do not post GitHub comments or make other workflow changes. After authorization, including authorization inherited from a matching approved `speckit-full` run, all workflow communication belongs only on the active GitHub issue or PR. Initial consent authorizes the live run, not any Spec Kit gate: those approvals still require the resolved human approver's explicit response in the GitHub thread.
+
 Prefix each bot comment with a unique marker:
 
 ```text
@@ -16,7 +18,7 @@ Use `status`, `question`, `approval`, `spec`, `plan`, `tasks`, `handoff`, or `fa
 
 Resolve the authorized human before asking for or accepting approval. For a personal repository, use its owner login. For an organization repository, require the user to identify a human maintainer. The `gh` login is the actor/tool identity, not proof that the actor is the human approver. Never accept a bot's own comment, a reaction, a reviewer's approval, or a non-approver's reply as a gate decision.
 
-If the approver cannot be resolved, stop without taking the next state-changing step. If a comment's author or intent is ambiguous, ask the user rather than guessing.
+If the approver cannot be resolved, stop without taking the next state-changing step. If a comment's author or intent is ambiguous, ask the user in the channel appropriate to the authorization state rather than guessing.
 
 ## Polling and watermark
 

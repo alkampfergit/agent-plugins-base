@@ -46,7 +46,7 @@ Only after the full eligible set is known, sort by `created_at` ascending with i
 - Exclude issues carrying `claim-label`, closed issues, and issues already linked to an open PR. Skip release-labeled issues; release operations are outside this plugin.
 - Process at most one issue per cycle by default and never more than three; if a larger batch is requested, ask the user to split it into separately authorized bounded runs. Stop the cycle on the first delegated failure.
 - Never auto-repair a dirty tree, commit unrelated work, merge/close a PR, create a release/tag, or change the requested repository/scope.
-- All approvals must come from the resolved human approver in the GitHub thread. Bots and non-approver comments are not approval.
+- Preflight questions, the read-only preview, and initial live-cycle or scheduling consent may use the console. Once an authorized cycle enters `speckit-gh`, follow its GitHub-only workflow communication protocol. All Spec Kit gate approvals must come from the resolved human approver in the GitHub thread; initial run consent does not replace them. Bots and non-approver comments are not gate approval.
 
 ## One live cycle (`mode=once`)
 

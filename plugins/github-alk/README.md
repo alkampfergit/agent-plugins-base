@@ -33,5 +33,5 @@ copilot plugin install github-alk@agent-plugins-base
 
 # OpenAI Codex CLI
 codex plugin marketplace add alkampfergit/agent-plugins-base
-codex plugin install github-alk
+codex plugin add github-alk@agent-plugins-base
 ```

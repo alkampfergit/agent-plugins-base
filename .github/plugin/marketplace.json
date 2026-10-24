@@ -16,7 +16,7 @@
     },
     {
       "name": "speckit-alk",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "description": "Claude-first, human-approved GitHub issue-to-PR workflows built around upstream GitHub Spec Kit skills.",
       "source": "./plugins/speckit-alk"
     }

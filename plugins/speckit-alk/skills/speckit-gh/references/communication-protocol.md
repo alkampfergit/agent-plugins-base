@@ -12,7 +12,7 @@ Prefix each bot comment with a unique marker:
 <!-- speckit-alk:<kind>:<uuid> -->
 ```
 
-Use `status`, `question`, `approval`, `spec`, `plan`, `tasks`, `handoff`, or `failure` for `<kind>`. Use the issue thread through Specify/Clarify/Plan/Tasks. Once the draft PR is opened, use the PR thread for implementation, CI, and review. Post one handoff pointer on the issue.
+Use `status`, `preview`, `question`, `approval`, `spec`, `plan`, `tasks`, `handoff`, or `failure` for `<kind>`. Use the issue thread through Specify/Clarify/Plan/Tasks. Once the draft PR is opened, use the PR thread for implementation, CI, and review. Post one handoff pointer on the issue. When run by `speckit-full`, cycle-level preview, authorization, status, and failure comments belong on its control issue.
 
 ## Approver identity
 

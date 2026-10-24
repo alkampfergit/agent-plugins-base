@@ -5,7 +5,7 @@ Claude-first orchestration for driving GitHub issues through the **upstream GitH
 ## Skills
 
 - **speckit-gh** — drive one GitHub issue through specify, clarify, plan, tasks, implementation, verification, and a review-ready PR. Human approval is required at each specification gate.
-- **speckit-full** — discover issues with a caller-selected label and run `speckit-gh` in bounded cycles. A read-only preview is required before the first live cycle.
+- **speckit-full** — discover issues with a caller-selected label and run `speckit-gh` in bounded cycles. All exchanges with the conductor (the human driving the run) happen on GitHub: the preview, authorization, status, and stop requests go through a caller-supplied control issue, and Spec Kit gates through the active issue or PR. A conductor-approved preview is required before the first live cycle.
 
 ## Agents
 

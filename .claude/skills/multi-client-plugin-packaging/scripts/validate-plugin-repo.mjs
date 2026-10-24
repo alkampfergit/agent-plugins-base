@@ -271,6 +271,37 @@ function checkMarketplaceSets() {
   }
 }
 
+// Each client roots relative sources differently: Claude Code applies metadata.pluginRoot
+// only to bare names (no "/"), Copilot prepends it to every relative source, and Codex
+// uses source.path from the marketplace root. Resolve each the way its client does.
+function resolveCatalogSource(client, data, entry) {
+  const pluginRoot = data.metadata?.pluginRoot || ".";
+  if (client === "codex") {
+    return entry.source?.source === "local" ? join(repoRoot, entry.source.path) : null;
+  }
+  if (typeof entry.source !== "string") return null;
+  if (client === "claude" && entry.source.includes("/")) return join(repoRoot, entry.source);
+  return join(repoRoot, pluginRoot, entry.source);
+}
+
+function checkMarketplaceSources() {
+  const catalogs = {
+    claude: join(repoRoot, ".claude-plugin", "marketplace.json"),
+    copilot: join(repoRoot, ".github", "plugin", "marketplace.json"),
+    codex: join(repoRoot, ".agents", "plugins", "marketplace.json"),
+  };
+  for (const [client, path] of Object.entries(catalogs)) {
+    if (!existsSync(path)) continue;
+    const data = readJson(path);
+    for (const entry of data.plugins || []) {
+      const resolved = resolveCatalogSource(client, data, entry);
+      if (resolved && !(existsSync(resolved) && statSync(resolved).isDirectory())) {
+        err("(root)", `${client} catalog: plugin "${entry.name}" source resolves to missing directory ${relative(repoRoot, resolved)} (R5)`);
+      }
+    }
+  }
+}
+
 function claudeCliAvailable() {
   const probe = spawnSync("claude --version", { shell: true, encoding: "utf8" });
   return !probe.error && probe.status === 0;
@@ -305,6 +336,7 @@ if (pluginRoots.length === 0) {
   }
 }
 checkMarketplaceSets();
+checkMarketplaceSources();
 
 if (claudeCliAvailable()) {
   runClaudeStrictValidate("(root)", repoRoot);

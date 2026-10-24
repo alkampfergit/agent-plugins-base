@@ -5,8 +5,7 @@
   },
   "metadata": {
     "description": "Alkampfer's cross-client agent plugins.",
-    "version": "1.0.0",
-    "pluginRoot": "./plugins"
+    "version": "1.0.0"
   },
   "plugins": [
     {

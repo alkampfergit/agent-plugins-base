@@ -1,7 +1,7 @@
 {
   "name": "REPLACE_ME-marketplace-name",
   "owner": { "name": "REPLACE_ME", "email": "REPLACE_ME" },
-  "metadata": { "description": "REPLACE_ME.", "version": "1.0.0", "pluginRoot": "./plugins" },
+  "metadata": { "description": "REPLACE_ME.", "version": "1.0.0" },
   "plugins": [
     {
       "name": "REPLACE_ME-plugin-name",

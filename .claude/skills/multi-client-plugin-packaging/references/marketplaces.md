@@ -35,7 +35,12 @@ The repo root **MUST** carry three catalogs. They point at the same
 
 ## R5.2 — `.github/plugin/marketplace.json`
 Same shape, Copilot-flavoured. Required: `name`, `owner`, `plugins[]`. Metadata lives
-under `metadata: { description, version, pluginRoot }`.
+under `metadata: { description, version }`.
+
+Do **not** set `metadata.pluginRoot` here. Copilot prepends it to every relative
+`source`, so `pluginRoot: "./plugins"` + `source: "./plugins/x"` resolves to
+`plugins/plugins/x` ("Plugin source directory not found"). Claude Code applies
+`pluginRoot` only to bare names, which is why the same pair works in R5.1.
 
 ```json
 {

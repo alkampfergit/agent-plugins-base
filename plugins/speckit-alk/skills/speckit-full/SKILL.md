@@ -21,7 +21,23 @@ Ask for any missing repository or label. Do not infer a label or select another 
 
 ## Read-only preview (`mode=preview`)
 
-Run `gh auth status`, confirm the current repo/branch and clean worktree, then list open issues matching the exact label with `gh issue list --repo <owner/name> --label <label> --state open --json number,title,url,labels,assignees,createdAt`. Re-fetch each candidate and skip issues with an active claim or an open linked PR. Show the eligible issues in oldest-first order, the configured per-cycle limit, and any unmet prerequisites. Do not add labels, assign, comment, create branches, or invoke `speckit-gh` in preview mode. Ask the user to authorize a specific `once` cycle or a bounded recurring `loop` after showing this result.
+Run `gh auth status`, confirm the current repo/branch and clean worktree, then perform complete discovery below. Show all eligible issues in the resulting order, the per-cycle limit and selected issues, and any unmet prerequisites. Do not add labels, assign, comment, create branches, or invoke `speckit-gh` in preview mode. Ask the user to authorize a specific `once` cycle or bounded recurring `loop` after showing this result.
+
+### Complete discovery (preview and every live cycle)
+
+Fetch all pages of open repository issues before filtering or selecting. With `repo` set to the verified `owner/name` and `issues_file` to a temporary file:
+
+```bash
+gh api --method GET "repos/$repo/issues" \
+  -f state=open -f sort=created -f direction=asc -f per_page=100 \
+  --paginate > "$issues_file"
+```
+
+Require a successful exit and complete pagination before consuming the file. On any page failure, discard the partial candidate set and stop; do not report an empty backlog or start an issue from incomplete results. Do not substitute `gh issue list`'s default window, a fixed large `--limit`, or a capped search result.
+
+Parse the successive JSON page arrays (for example with `jq -s 'add // []'`), flatten them, exclude entries with `pull_request` (this endpoint also returns PRs), deduplicate by issue number, and match the caller's label exactly against `labels[].name`. Local label matching also preserves labels containing commas. Re-fetch each matching candidate and verify it is still open and still carries the label; exclude active claims, release-labeled issues, and issues linked to an open PR. Complete any pagination needed for eligibility checks too.
+
+Only after the full eligible set is known, sort by `created_at` ascending with issue number as a deterministic tie-breaker. If the repository documents priority labels, apply that documented priority order first and oldest-first within each priority. Then apply `max-per-cycle` (default 1, maximum 3). Use this same discovery, eligibility, ordering, and limit sequence for preview and live cycles.
 
 ## Safety and prerequisites
 
@@ -34,8 +50,8 @@ Run `gh auth status`, confirm the current repo/branch and clean worktree, then l
 
 ## One live cycle (`mode=once`)
 
-1. Re-fetch the repo and issue list; do not trust a prior preview for current state.
-2. Select oldest eligible issue first, unless the repository uses explicit priority labels; apply only a documented priority order.
+1. Re-fetch the repo and run complete discovery above, including every issue page and eligibility check; do not trust a prior preview for current state.
+2. Sort the complete eligible set as described above, then select at most `max-per-cycle` issues. Never apply the cycle limit to raw pages or before eligibility filtering.
 3. Before starting each issue, check that no open PR already closes it. If one exists, report it and skip without changing labels.
 4. Pass the selected issue, repository, claim label, and live-cycle authorization to this plugin's `speckit-gh` workflow using the host client's native mechanism; in Claude Code, plugin skills are namespaced (for example `/speckit-alk:speckit-gh`). `speckit-gh` must re-fetch eligibility and own the claim-label write; do not claim twice. If the client cannot invoke a sibling/plugin skill, stop rather than pretending it ran.
 5. On success, report the verified PR URL. On failure, stop the cycle and report the current issue/PR state. Do not continue through a backlog of failures.

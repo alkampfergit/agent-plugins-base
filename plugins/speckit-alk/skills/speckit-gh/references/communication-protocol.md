@@ -28,15 +28,15 @@ For PR feedback, inspect all three streams:
 
 ```bash
 gh pr view <PR> --repo <owner/repo> --json comments,reviews
- gh api repos/<owner>/<repo>/pulls/<PR>/comments
+gh api --paginate "repos/<owner>/<repo>/pulls/<PR>/comments?per_page=100"
 ```
 
-The second command returns inline review comments; include replies/threads where available. A successful top-level comment scan alone is not a complete review sweep.
+The second command collects every page of inline review comments, including replies. Parse and flatten the successive JSON page arrays (for example with `jq -s 'add // []'`) and inspect every comment; retain `id` and `in_reply_to_id` to associate replies with parent threads across page boundaries. Do not filter out replies. Require successful completion of all pages before treating the sweep as complete or advancing its watermark; on a page failure, stop and report an incomplete sweep. A successful top-level comment scan alone is not a complete review sweep.
 
 ## Safe posting
 
 - Re-fetch the issue/PR immediately after any long test, wait, or delegated action and before posting.
-- Keep comments short, factual, and linked to actual artifacts or check output.
+- Keep status comments short, factual, and linked to actual artifacts or check output. Approval artifacts must include full contents as required by the artifact publication gate in `flow.md`; do not shorten or truncate them.
 - Do not post secrets, credentials, or unredacted logs.
 - A write command's success is not proof of remote state: read back the exact issue, label, PR, review, or check before claiming it succeeded.
 - On cancellation, stop polling. Do not remove labels, close issues, close PRs, or delete branches unless explicitly requested.

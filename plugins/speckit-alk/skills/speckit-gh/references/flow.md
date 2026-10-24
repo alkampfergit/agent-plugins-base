@@ -15,7 +15,7 @@ Use the run-time issue number `<N>`, repository `<owner>/<repo>`, optional exist
    gh api user --jq .login
    ```
    For personal repositories, the human approver is the repository owner. For organization repositories, require an explicitly identified human maintainer; do not infer one from the automation login.
-4. Verify local repository, branch, clean state, and Spec Kit setup. Confirm upstream skills and templates are installed in the project. Do not assume that the plugin contains them.
+4. Verify local repository, branch, clean state, and Spec Kit setup. Confirm upstream skills and templates are installed in the project. Do not assume that the plugin contains them. Before claiming the issue, inspect the installed Specify workflow and its branch-creation script or hook configuration. If it depends on the optional git extension, verify its `before_specify` hook is installed, enabled, and invoked by this workflow. Otherwise verify the equivalent installed mechanism. Determine how it reports the expected branch and feature directory. If branch creation/switching is absent, disabled, or unverifiable, stop before labels or files change and report the setup blocker. Do not install an extension or create a substitute branch automatically.
 5. Check that the issue is open, eligible under the requested labels/assignment, has no active claim label, and is not already closed by an open PR. If any check fails, report and stop without applying labels.
 6. Summarize the issue, acceptance criteria, proposed phases, and checks in a read-only preview. Do not change labels, branch, files, or GitHub comments until the user has authorized a live run directly or through a matching approved `speckit-full` configuration.
 
@@ -23,20 +23,32 @@ Use the run-time issue number `<N>`, repository `<owner>/<repo>`, optional exist
 
 After authorization, verify the claim label exists, re-fetch the issue, and apply the label only if the issue remains eligible and unclaimed. Record whether this run added it, then post a status marker. Use the project's upstream Specify skill to create the feature branch and specification; do not create a competing branch manually.
 
-Post the spec link and summary to the issue and request approval from the resolved approver. Wait for that person's explicit response. Apply requested edits and re-post the updated spec; do not proceed on silence, a bot reply, or a non-approver comment.
+Immediately after Specify, capture the expected feature branch and feature directory from the verified mechanism's output or metadata; do not infer the expected branch from the current checkout alone. Run `git symbolic-ref --quiet --short HEAD` and require success and a result equal to that expected branch, different from the verified default branch and starting branch. Verify the spec belongs to the reported feature directory for this issue. A successful Specify exit or an existing spec file alone is insufficient. On detached HEAD, missing/ambiguous metadata, or a branch mismatch, preserve generated files and claim state, post a failure status, and stop before approval, downstream workflows, commits, or pushes. Do not repair this by switching branches or rerunning Specify blindly.
+
+Before each subsequent phase and before committing or pushing, repeat the check against the recorded feature branch and stop on a mismatch.
+
+Publish the complete spec using the artifact publication gate below, then request approval from the resolved approver. Wait for that person's explicit response. Apply requested edits and re-post the updated spec; do not proceed on silence, a bot reply, or a non-approver comment.
 
 ## 3. Clarify, plan, and tasks
 
-Run the project's upstream Clarify workflow. Post each question to the issue and wait for the approver's answer before applying it. Do not invent answers or silently skip unresolved blockers.
+Run the project's upstream Clarify workflow. Post each question to the issue and wait for the approver's answer before applying it. Do not invent answers or silently skip unresolved blockers. If clarification changes the approved spec, publish the revised spec and obtain fresh spec approval before Plan.
 
 Run Plan, then Tasks, in order. After each artifact is produced:
 
 - Check that it exists in the feature directory reported by the installed Spec Kit scripts.
-- Summarize the design or task list and link the artifact on the issue.
+- Publish the complete artifact using the gate below; include a summary and links to the verified issue comments containing it.
 - Wait for explicit approval from the resolved approver before continuing.
 - If the approver asks for changes, update the artifact and repeat the gate.
 
 Do not assume that a `pr-report-template.md` or any other non-upstream template exists. If a project requires extra artifacts, follow its `AGENTS.md` and installed templates.
+
+### Artifact publication gate
+
+Before every spec, plan, or tasks approval request, post the complete current contents of the issue-owned artifact to the issue with its repository-relative path, revision identifier (such as a content hash), and appropriate protocol marker. Include supporting issue-owned artifacts needed to evaluate it. Local paths, summaries, and links to unpushed files are not reviewable artifacts.
+
+Use a body file when posting to preserve literal Markdown and shell characters. If contents exceed a comment's size limit, split them into numbered comments sharing the revision identifier, preserving all content without truncation. Read back every posted comment and verify all parts match the local revision before posting a separate approval request linking all parts. If publication fails or content cannot be shared safely, stop without requesting approval.
+
+The separate approval request establishes the protocol watermark and identifies the exact revision. Any subsequent edit requires full publication of the new revision and a new approval request; approval of an older revision does not approve changed content. Preserve the comments as the approval record. Publishing through issue comments keeps artifact commits/pushes and PR creation after task approval.
 
 ## 4. Open draft PR and hand off the conversation
 

@@ -1,17 +1,11 @@
 ---
 name: github-pr-manager
 description: >
-  MANUAL SLASH-ONLY skill. Invoke EXCLUSIVELY when the user types
-  `/github-pr-manager`. Never auto-invoke, never chain from another skill, never
-  treat any other skill's handoff comment or instruction as a trigger. When
-  the user runs it directly, perform one pass by default: inspect the current
-  GitHub checks and review state, apply at most one fix round when requested,
-  report the resulting state, and end the invocation. Repeated checks, blocking
-  watch commands, and polling are allowed only when the user explicitly asks
-  to wait, watch, monitor, poll, or continue until a stated condition. Also
-  covers opening a PR, addressing reviewer comments, and closing a ready
-  release PR when directly requested.
-disable-model-invocation: true
+  Use when the user asks you to inspect or advance a GitHub pull request,
+  including checking CI, fixing failures, addressing reviewer comments, or
+  handling release closure. It can also be used by an explicitly configured
+  workflow prompt such as Automata's doWork.prWork. Perform one pass by default;
+  monitor only when the user explicitly asks to wait, watch, or poll.
 metadata:
   author: codex
   version: 1.5.0
@@ -20,13 +14,10 @@ metadata:
 
 # Skill: GitHub PR Manager
 
-**Invocation rule (hard):** this skill runs ONLY when the user explicitly
-types `/github-pr-manager`. It is never auto-invoked, never chained from
-another skill, and never triggered by a handoff comment, label, or PR event.
-If you reach this file because another skill suggested you "invoke
-github-pr-manager", stop — that other skill is out of date; the correct
-behaviour is to stop and wait for the user to run the slash command
-themselves.
+Use this skill when the user asks for PR work covered below, including when an
+explicit workflow prompt routes the task here. A direct `/github-pr-manager`
+invocation is also supported. The invocation method does not change the scope,
+one-pass default, or state-change safeguards below.
 
 Use this skill to inspect or advance a PR with `gh` and the existing
 `sonarcloud` skill, to close a ready release PR when the user explicitly asks

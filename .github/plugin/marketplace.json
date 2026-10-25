@@ -10,7 +10,7 @@
   "plugins": [
     {
       "name": "github-alk",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "description": "GitHub CLI, CI, PR, and SonarCloud automation skills, ported from azdo-cli.",
       "source": "./plugins/github-alk"
     },

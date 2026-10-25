@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.2
+
+- Allow `github-pr-manager` to be selected automatically or routed from workflow
+  prompts; retain the one-pass default and existing PR safeguards.
+
 ## 0.1.1
 
 - Restructured under `plugins/github-alk/` for multi-client packaging (Claude Code,
